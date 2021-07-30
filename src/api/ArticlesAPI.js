@@ -25,18 +25,31 @@ const searchArticles = async (textToSearchFor) => {
   return data;
 };
 
-const addArticle = (articleObject) => {
-  return fetch(BASE_URL, {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: "POST",
-    body: JSON.stringify(articleObject)
-  });
-};
+
+const addArticle = async (articleObject, token) => {
+  try{
+      let response = await fetch(BASE_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        method: "POST",
+        body: JSON.stringify(articleObject)
+
+      })
+      let resp = await response.json()
+      if (resp.error) {
+        console.log(resp.error.message)
+      }
+      return resp     
+                
+  } catch (error) {
+    console.error('Add Article failed: ', error)
+  }
+}
 
 export {
-  fetchArticleByID,
+  fetchArticleByID,                   
   fetchArticles,
   fetchArticlesBySection,
   searchArticles,

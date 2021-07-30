@@ -49,6 +49,7 @@ it('calls fetchArticlesBySection(\'opinion\')', (done) => {
 
 it('submits an article by calling addArticle()', (done) => {
   const request = fetchMock.post('http://localhost:3001/api/articles', {success: true});
+  console.log("in api_server/temp/VI/ArticlesAPI.t.js")
   const articleObject = {title: 'test', byline: 'title', abstract: 'adsf'};
   return addArticle(articleObject, 'token')
     .then((json) => {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { addArticle } from '../api/ArticlesAPI';
 import { Redirect } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
+import UserContext from '../contexts/userContext';
 
 class AddArticlePage extends Component {
   state = {
@@ -10,6 +11,8 @@ class AddArticlePage extends Component {
 
   handleFormSubmit = async (event) => {
     event.preventDefault();
+    let user = this.context
+    let token = user.user.id
     const articleObject = {
       title: event.target.elements[0].value,
       byline: event.target.elements[1].value,
@@ -17,15 +20,18 @@ class AddArticlePage extends Component {
     }
 
     try {
-      const response = await addArticle(articleObject);
+      const response = await addArticle(articleObject, token);
+      console.log(response)
       if (response.status === 200) {
+        alert("arrived here");
         // redirect the user back to Home Page upon successful POST
         this.setState({ redirect: true });
       } else {
-        const jsonData = await response.json();
-        alert(jsonData.error.message);
+        alert(response.error.message);
       }
+
     } catch (err) {
+      alert("boo-boo")
       console.error('error occurred posting article: ', err);
     }
   }
@@ -57,6 +63,8 @@ class AddArticlePage extends Component {
     )
   }
 }
+
+AddArticlePage.contextType=UserContext
 
 export default AddArticlePage;
 
